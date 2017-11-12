@@ -42,7 +42,7 @@ exports.index = function (req, res, next) {
   }
 
   var limit = config.list_topic_count;
-  var options = { skip: (page - 1) * limit, limit: limit, sort: '-top -last_reply_at'};
+  var options = { skip: (page - 1) * limit, limit: limit, sort: '-top -create_at'};
 
   Topic.getTopicsByQuery(query, options, proxy.done('topics', function (topics) {
     return topics;
