@@ -6,6 +6,18 @@ var config    = require('../config');
 var _         = require('lodash');
 
 var TopicSchema = new Schema({
+
+  rental: {
+    city: { type: String },
+    addr: { type: String },
+    price: { type: Number },
+    size: { type: Number },
+    room_num: { type: Number },
+    start_date: { type: Date },
+    end_date: { type: Date },
+    phone: { type: String },
+  },
+
   title: { type: String },
   content: { type: String },
   author_id: { type: ObjectId },
