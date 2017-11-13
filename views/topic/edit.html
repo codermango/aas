@@ -5,51 +5,63 @@
     <div class='header'>
       <ol class='breadcrumb'>
         <li><a href='/'>主页</a><span class='divider'>/</span></li>
-        <% if(typeof(action) !== 'undefined' && action == 'edit'){ %>
-        <li class='active'>编辑话题</li>
-        <% }else{ %>
-        <li class='active'>发布话题</li>
+        <% if (typeof(action) !== 'undefined' && action == 'edit') { %>
+          <li class='active'>编辑话题</li>
+        <% } else { %>
+          <li class='active'>发布话题</li>
         <% } %>
       </ol>
     </div>
     <div class='inner post'>
-      <% if(typeof(edit_error) !== 'undefined' && edit_error){ %>
-      <div class="alert alert-error">
-        <a class="close" data-dismiss="alert" href="#">&times;</a>
-        <strong><%= edit_error %></strong>
-      </div>
+      <% if (typeof(edit_error) !== 'undefined' && edit_error) { %>
+        <div class="alert alert-error">
+          <a class="close" data-dismiss="alert" href="#">&times;</a>
+          <strong><%= edit_error %></strong>
+        </div>
       <% } %>
-      <% if(typeof(error) !== 'undefined' && error){ %>
-      <div class="alert alert-error">
-        <strong><%= error %></strong>
-      </div>
-      <% }else{ %>
-      <% if (typeof(action) !== 'undefined' && action === 'edit') { %>
-      <form id='create_topic_form' action='/topic/<%= topic_id %>/edit' method='post'>
+      <% if (typeof(error) !== 'undefined' && error) { %>
+        <div class="alert alert-error">
+          <strong><%= error %></strong>
+        </div>
+      <% } else { %>
+        <% if (typeof(action) !== 'undefined' && action === 'edit') { %>
+          <form id='create_topic_form' action='/topic/<%= topic_id %>/edit' method='post'>
         <% } else { %>
-        <form id='create_topic_form' action='/topic/create' method='post'>
-          <% } %>
-          <fieldset>
-            <span class="tab-selector">选择版块：</span>
-            <select name="tab" id="tab-value">
-              <option value="">请选择</option>
+          <form id='create_topic_form' action='/topic/create' method='post'>
+      <% } %>
+        <fieldset>
+          <span class="tab-selector">选择版块：</span>
+          <select name="tab" id="tab-value">
+            <option value="">请选择</option>
               <%
-              var tabValue = '';
-              if (typeof(tab) !== 'undefined') {
-                tabValue = tab;
-              }
-              tabs.forEach(function (pair) {
-                var value = pair[0];
-                var text = pair[1];
-                %>
-                <option value="<%=value%>" <%= tabValue === value ? 'selected': '' %>><%=text%></option>
-
+                var tabValue = '';
+                if (typeof(tab) !== 'undefined') {
+                  tabValue = tab;
+                }
+                tabs.forEach(function (pair) {
+                  var value = pair[0];
+                  var text = pair[1];
+              %>
+                  <option value="<%=value%>" <%= tabValue === value ? 'selected': '' %>><%=text%></option>
               <%});%>
             </select>
             <span id="topic_create_warn"></span>
-            <textarea autofocus class='span9' id='title' name='title' rows='1'
-                      placeholder="标题字数 10 字以上"
-                    ><%= typeof(title) !== 'undefined' && title || '' %></textarea>
+            <textarea 
+              autofocus 
+              class='span9' 
+              id='title' 
+              name='title' 
+              rows='1'
+              placeholder="标题字数 10 字以上"
+            >
+              <%= typeof(title) !== 'undefined' && title || '' %>
+            </textarea>
+
+            <!--如果是租房信息则显示填写房屋信息的部分-->
+            <div id="rental">
+              hahahaha
+            </div>
+            <!--如果是租房信息则显示填写房屋信息的部分-->
 
             <div class='markdown_editor in_editor'>
               <div class='markdown_in_editor'>
@@ -106,5 +118,19 @@
       $('#topic_create_warn').html(warnMsg);
     });
     // END 选择招聘版块时，给出提示
+
+    // 选择租房版块时，显示额外信息
+    $('#tab-value').on('change', function () {
+      var $this = $(this);
+      var value = $this.val();
+      var warnMsg = '';
+      if (value === 'rental') {
+        $('#rental').show();
+      } else {
+        $('#rental').hide();
+      }
+    });
+    // END 选择租房版块时，显示额外信息
+
   })();
 </script>
