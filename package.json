@@ -68,6 +68,6 @@
     "test": "make test",
     "dev": "node_modules/nodemon/bin/nodemon.js app.js",
     "debug": "node_modules/nodemon/bin/nodemon.js --inspect app.js",
-    "deploy": "NODE_ENV=production pm2 start app.js"
+    "mongod": "mongod --fork --logpath /var/log/mongod.log"
   }
 }

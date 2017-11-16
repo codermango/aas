@@ -1,0 +1,21 @@
+{
+    "name": "swedenews-app",  // 应用名称
+    "script": "./app.js",  // 实际启动脚本
+    "cwd": "./",  // 当前工作路径
+    "watch": [  // 监控变化的目录，一旦变化，自动重启
+      
+    ],
+    "ignore_watch" : [  // 从监控目录中排除
+      
+    ],
+    "env_prod": {
+      "NODE_ENV": "production",
+      "REMOTE_ADDR": "http://swedenews.com/"
+    },
+    "env_dev": {
+      "NODE_ENV": "development"
+    },
+    "env_test": {
+      "NODE_ENV": "test"
+    }
+  }
