@@ -61,8 +61,8 @@ var a = 1;
 
   describe('#tabName', function () {
     it('should translate', function () {
-      renderHelper.tabName('rental')
-        .should.equal('租房')
+      renderHelper.tabName('experience')
+        .should.equal('经验')
     })
   })
 

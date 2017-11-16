@@ -184,7 +184,7 @@ describe('test/controllers/sign.test.js', function () {
       mm(mailService, 'sendMail', function (data) {
         data.from.should.equal('Sweden News <club@126.com>');
         data.to.should.match(new RegExp(loginname));
-        data.subject.should.equal('Nodeclub社区密码重置');
+        data.subject.should.equal('Sweden News社区密码重置');
         data.html.should.match(new RegExp('<p>您好：' + loginname));
         resetKey = data.html.match(/key=(.+?)&/)[1];
         done();
