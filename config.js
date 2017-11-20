@@ -69,11 +69,11 @@ var config = {
 
   // 邮箱配置
   mail_opts: {
-    host: 'smtp.126.com',
-    port: 25,
+    host: 'smtp.zoho.eu',
+    port: 465,
     auth: {
-      user: 'club@126.com',
-      pass: 'club'
+      user: 'support@swedenews.com',
+      pass: '1123581321mark'
     },
     ignoreTLS: true,
   },
