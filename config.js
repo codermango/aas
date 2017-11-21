@@ -33,7 +33,7 @@ var config = {
   // 社区的域名
   host: 'swedenews.com',
   // 默认的Google tracker ID，自有站点请修改，申请地址：http://www.google.com/analytics/
-  google_tracker_id: '',
+  google_tracker_id: 'UA-47278174-2',
   // 默认的cnzz tracker ID，自有站点请修改
   cnzz_tracker_id: '',
 
