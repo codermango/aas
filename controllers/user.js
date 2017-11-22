@@ -121,13 +121,13 @@ exports.setting = function (req, res, next) {
   // post
   var action = req.body.action;
   if (action === 'change_setting') {
-    var url = validator.trim(req.body.url);
+    // var url = validator.trim(req.body.url);
     var location = validator.trim(req.body.location);
     var weibo = validator.trim(req.body.weibo);
     var signature = validator.trim(req.body.signature);
 
     User.getUserById(req.session.user._id, ep.done(function (user) {
-      user.url = url;
+      // user.url = url;
       user.location = location;
       user.signature = signature;
       user.weibo = weibo;
