@@ -113,18 +113,33 @@ exports.index = function (req, res, next) {
 
 exports.create = function (req, res, next) {
   res.render('topic/edit', {
-    tabs: config.tabs
+    tabs: config.tabs,
+    cities: config.cities
   });
 };
 
 
 exports.put = function (req, res, next) {
-  var title   = validator.trim(req.body.title);
-  var tab     = validator.trim(req.body.tab);
+  var title = validator.trim(req.body.title);
   var content = validator.trim(req.body.t_content);
+  var tab = validator.trim(req.body.tab);
+  var isRental = tab === 'rental';
+
+  var city = validator.trim(req.body.city);
+  var addr = validator.trim(req.body.addr);
+  var price = validator.trim(req.body.price);
+  var size = validator.trim(req.body.size);
+  var roomNum = validator.trim(req.body.roomNum);
+  var phone = validator.trim(req.body.phone);
+  var startDate = validator.trim(req.body.startDate);
+  var endDate = validator.trim(req.body.endDate);
 
   // 得到所有的 tab, e.g. ['ask', 'share', ..]
   var allTabs = config.tabs.map(function (tPair) {
+    return tPair[0];
+  });
+
+  var allCities = config.cities.map(function (tPair) {
     return tPair[0];
   });
 
@@ -138,6 +153,25 @@ exports.put = function (req, res, next) {
     editError = '必须选择一个版块。';
   } else if (content === '') {
     editError = '内容不可为空';
+  } else if (isRental && (!city || allCities.indexOf(city) === -1)) {
+    editError = '必须选择城市';
+  } else if (isRental && addr === '') {
+    editError = '地址不能为空。';
+  } else if (isRental && !validator.isNumeric(price)) {
+    editError = '价格不能为空且只能为数字。';
+  } else if (isRental && !validator.isNumeric(size)) {
+    editError = '面积不能为空且只能为数字。';
+  } else if (isRental && !validator.isNumeric(roomNum)) {
+    editError = '房间数不能为空且只能为数字。';
+  } else if (isRental && !validator.isNumeric(phone)) {
+    editError = '电话号码不能为空且只能为数字。';
+  } else if (
+    isRental && (
+    !validator.toDate(startDate) ||
+    !validator.toDate(endDate) ||
+    validator.isAfter(startDate, endDate))
+  ) {
+    editError = '结束时间必须在起始时间之后。';
   }
   // END 验证
 
@@ -147,11 +181,33 @@ exports.put = function (req, res, next) {
       edit_error: editError,
       title: title,
       content: content,
-      tabs: config.tabs
+      tabs: config.tabs,
+      cities: config.cities,
+      tab: tab,
+
+      city: city,
+      addr: addr,
+      price: price,
+      size: size,
+      roomNum: roomNum,
+      phone: phone,
+      startDate: startDate,
+      endDate: endDate
     });
   }
 
-  Topic.newAndSave(title, content, tab, req.session.user._id, function (err, topic) {
+  var rental = isRental ? {
+    city: city,
+    addr: addr,
+    price: validator.toInt(price),
+    size: validator.toInt(size),
+    room_num: validator.toInt(roomNum),
+    phone: phone,
+    start_date: validator.toDate(startDate),
+    end_date: validator.toDate(endDate)
+  } : undefined;
+
+  Topic.newAndSave(title, content, tab, req.session.user._id, rental, function (err, topic) {
     if (err) {
       return next(err);
     }

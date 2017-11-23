@@ -121,10 +121,16 @@ var config = {
 
   // 版块
   tabs: [
-    ['experience', '经验']
-    // ['rental', '租房'],
+    ['experience', '经验'],
+    ['rental', '租房']
     // ['ask', '问答'],
     // ['job', '招聘'],
+  ],
+
+  cities: [
+    ['stockholm', '斯德哥尔摩'],
+    ['gothenburg', '哥德堡'],
+    ['uppsala', '乌普萨拉']
   ],
 
   // 极光推送

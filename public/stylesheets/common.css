@@ -3,7 +3,8 @@ body, p, input, textarea {
     word-break: break-word;
 }
 
-textarea, input[type="text"],
+textarea, 
+input[type="text"],
 input[type="password"],
 input[type="datetime"],
 input[type="datetime-local"],
@@ -18,7 +19,7 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-    background: hsla(0, 0%, 0%, 0)
+    background: hsla(0, 0%, 0%, 0);
 }
 
 pre {
@@ -63,4 +64,8 @@ textarea {
 
 input, textarea {
     background: hsla(0, 0%, 0%, 0);
+}
+
+select.input-xlarge {
+    width: 284px;
 }
