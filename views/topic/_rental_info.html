@@ -1,0 +1,40 @@
+<div class="inner rentalinfo">
+    <div class="left">
+        <div class="info-item">
+            <span class="label">城市</span>
+            <span class="value"><%= rental.cityName %></span>
+        </div>
+        <div class="info-item">
+            <span class="label">价格</span>
+            <span class="value"><%= rental.price %> kr</span>
+        </div>
+        <div class="info-item">
+            <span class="label">电话</span>
+            <span class="value"><%= rental.phone %></span>
+        </div>
+        <div class="info-item">
+            <span class="label">地址</span>
+            <span class="value"><%= rental.addr %></span>
+        </div>
+        
+    </div>
+    <div class="right">
+        <div class="info-item">
+            <span class="label">面积</span>
+            <span class="value"><%= rental.size %> ㎡</span>
+        </div>
+        <div class="info-item">
+            <span class="label">房间数</span>
+            <span class="value"><%= rental.room_num %></span>
+        </div>
+        
+        <div class="info-item">
+            <span class="label">起始时间</span>
+            <span class="value"><%= rental.start_date.toLocaleDateString() %></span>
+        </div>
+        <div class="info-item">
+            <span class="label">结束时间</span>
+            <span class="value"><%= rental.end_date.toLocaleDateString() %></span>
+        </div>
+    </div>
+</div>

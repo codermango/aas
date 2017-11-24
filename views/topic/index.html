@@ -126,6 +126,11 @@
       </div>
       <% } %>
     </div>
+
+    <% if (topic.tab === 'rental') { %>
+    <%- partial('./_rental_info', {rental: topic.rental}) %>
+    <% } %>
+
     <div class='inner topic'>
 
       <div class='topic_content'>

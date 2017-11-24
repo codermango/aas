@@ -215,11 +215,31 @@ a.light:hover {
 }
 
 .panel .inner.topic,
+.panel .inner.rentalinfo,
 .panel .inner.reply,
 .panel .inner.userinfo,
 .panel .inner.post {
   padding: 10px;
   border-top: 1px solid #e5e5e5;
+}
+
+.rentalinfo {
+  .left {
+    display: inline-block;
+    width: 49%;
+  }
+  .right {
+    display: inline-block;
+    width: 49%;
+  }
+  .info-item {
+    .label {
+      // width: 50%;
+    }
+    .value {
+      width: 50%;
+    }
+  }
 }
 
 .panel .inner {

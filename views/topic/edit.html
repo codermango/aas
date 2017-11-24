@@ -30,6 +30,8 @@
           <form id='create_topic_form' class="form-horizontal" action='/topic/create' method='post'>
       <% } %>
         <fieldset>
+          
+          <div id="topic_create_warn"></div>
 
           <div class='control-group'>
             <label class='tab-selector control-label'>选择版块：</label>
@@ -51,8 +53,6 @@
             </div>
           </div>
 
-      
-          <span id="topic_create_warn"></span>
           <div class='control-group'>
             <label class='control-label' for='name'>标题</label>
             <div class='controls'>

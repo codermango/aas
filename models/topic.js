@@ -54,4 +54,20 @@ TopicSchema.virtual('tabName').get(function () {
   }
 });
 
+TopicSchema.virtual('rental.cityName').get(function () {
+  if (!this.rental) {
+    return undefined;
+  } 
+  var city  = this.rental.city;
+  var pair = _.find(config.cities, function (_pair) {
+    return _pair[0] === city;
+  });
+
+  if (pair) {
+    return pair[1];
+  } else {
+    return '';
+  }
+});
+
 mongoose.model('Topic', TopicSchema);
