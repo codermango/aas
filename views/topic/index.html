@@ -127,7 +127,7 @@
       <% } %>
     </div>
 
-    <% if (topic.tab === 'rental') { %>
+    <% if (topic.tab === 'rental' && topic.rental.price) { %>
     <%- partial('./_rental_info', {rental: topic.rental}) %>
     <% } %>
 

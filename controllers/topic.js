@@ -7,6 +7,7 @@
  */
 
 var validator = require('validator');
+var moment = require('moment');
 
 var at           = require('../common/at');
 var User         = require('../proxy').User;
@@ -42,8 +43,7 @@ exports.index = function (req, res, next) {
     return res.render404('此话题不存在或已被删除。');
   }
   var events = ['topic', 'other_topics', 'no_reply_topics', 'is_collect'];
-  var ep = EventProxy.create(events,
-    function (topic, other_topics, no_reply_topics, is_collect) {
+  var ep = EventProxy.create(events, function (topic, other_topics, no_reply_topics, is_collect) {
     res.render('topic/index', {
       topic: topic,
       author_other_topics: other_topics,
@@ -241,13 +241,24 @@ exports.showEdit = function (req, res, next) {
     }
 
     if (String(topic.author_id) === String(req.session.user._id) || req.session.user.is_admin) {
+      // debugger;
       res.render('topic/edit', {
         action: 'edit',
         topic_id: topic._id,
         title: topic.title,
         content: topic.content,
         tab: topic.tab,
-        tabs: config.tabs
+        tabs: config.tabs,
+        cities: config.cities,
+
+        city: topic.rental ? topic.rental.city : undefined,
+        addr: topic.rental ? topic.rental.addr : undefined,
+        price: topic.rental ? topic.rental.price : undefined,
+        size: topic.rental ? topic.rental.size : undefined,
+        roomNum: topic.rental ? topic.rental.room_num : undefined,
+        phone: topic.rental ? topic.rental.phone : undefined,
+        startDate: topic.rental ? moment(topic.rental.start_date).format('YYYY-MM-DD') : undefined,
+        endDate: topic.rental ? moment(topic.rental.end_date).format('YYYY-MM-DD') : undefined
       });
     } else {
       res.renderError('对不起，你不能编辑此话题。', 403);
@@ -257,9 +268,6 @@ exports.showEdit = function (req, res, next) {
 
 exports.update = function (req, res, next) {
   var topic_id = req.params.tid;
-  var title    = req.body.title;
-  var tab      = req.body.tab;
-  var content  = req.body.t_content;
 
   Topic.getTopicById(topic_id, function (err, topic, tags) {
     if (!topic) {
@@ -268,9 +276,28 @@ exports.update = function (req, res, next) {
     }
 
     if (topic.author_id.equals(req.session.user._id) || req.session.user.is_admin) {
-      title   = validator.trim(title);
-      tab     = validator.trim(tab);
-      content = validator.trim(content);
+      var title = validator.trim(req.body.title);
+      var tab = validator.trim(req.body.tab);
+      var content = validator.trim(req.body.t_content);
+      var isRental = tab === 'rental';
+
+      var city = validator.trim(req.body.city);
+      var addr = validator.trim(req.body.addr);
+      var price = validator.trim(req.body.price);
+      var size = validator.trim(req.body.size);
+      var roomNum = validator.trim(req.body.roomNum);
+      var phone = validator.trim(req.body.phone);
+      var startDate = validator.trim(req.body.startDate);
+      var endDate = validator.trim(req.body.endDate);
+
+      // 得到所有的 tab, e.g. ['ask', 'share', ..]
+      var allTabs = config.tabs.map(function (tPair) {
+        return tPair[0];
+      });
+
+      var allCities = config.cities.map(function (tPair) {
+        return tPair[0];
+      });
 
       // 验证
       var editError;
@@ -278,8 +305,29 @@ exports.update = function (req, res, next) {
         editError = '标题不能是空的。';
       } else if (title.length < 5 || title.length > 100) {
         editError = '标题字数太多或太少。';
-      } else if (!tab) {
+      } else if (!tab || allTabs.indexOf(tab) === -1) {
         editError = '必须选择一个版块。';
+      } else if (content === '') {
+        editError = '内容不可为空';
+      } else if (isRental && (!city || allCities.indexOf(city) === -1)) {
+        editError = '必须选择城市';
+      } else if (isRental && addr === '') {
+        editError = '地址不能为空。';
+      } else if (isRental && !validator.isNumeric(price)) {
+        editError = '价格不能为空且只能为数字。';
+      } else if (isRental && !validator.isNumeric(size)) {
+        editError = '面积不能为空且只能为数字。';
+      } else if (isRental && !validator.isNumeric(roomNum)) {
+        editError = '房间数不能为空且只能为数字。';
+      } else if (isRental && !validator.isNumeric(phone)) {
+        editError = '电话号码不能为空且只能为数字。';
+      } else if (
+        isRental && (
+        !validator.toDate(startDate) ||
+        !validator.toDate(endDate) ||
+        validator.isAfter(startDate, endDate))
+      ) {
+        editError = '结束时间必须在起始时间之后。';
       }
       // END 验证
 
@@ -289,14 +337,36 @@ exports.update = function (req, res, next) {
           edit_error: editError,
           topic_id: topic._id,
           content: content,
-          tabs: config.tabs
+          cities: config.cities,
+          tabs: config.tabs,
+
+          city: city,
+          addr: addr,
+          price: price,
+          size: size,
+          roomNum: roomNum,
+          phone: phone,
+          startDate: startDate,
+          endDate: endDate
         });
       }
 
+      var rental = isRental ? {
+        city: city,
+        addr: addr,
+        price: validator.toInt(price),
+        size: validator.toInt(size),
+        room_num: validator.toInt(roomNum),
+        phone: phone,
+        start_date: validator.toDate(startDate),
+        end_date: validator.toDate(endDate)
+      } : undefined;
+
       //保存话题
-      topic.title     = title;
-      topic.content   = content;
-      topic.tab       = tab;
+      topic.title = title;
+      topic.content = content;
+      topic.tab = tab;
+      topic.rental = rental;
       topic.update_at = new Date();
 
       topic.save(function (err) {

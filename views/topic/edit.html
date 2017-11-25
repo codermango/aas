@@ -113,7 +113,7 @@
                   type='number'
                   min="0"
                   value="<%= typeof(price) === 'undefined' ? '' : price %>"
-                  placeholder="克朗"
+                  placeholder="克朗/月"
                 />
               </div>
             </div>
@@ -255,11 +255,16 @@
           }
         });
         var cityValue = $('#city-value').val();
-        if (noValIds.length !== 0 || !cityValue) {
+        if (noValIds.length !== 0) {
           noValIds.forEach(function(item) {
             var id = ids[item];
             $('#' + id).closest('.control-group').addClass('error');
           });
+          alert('信息未填完整');
+          $('.submit_btn').button('reset');
+          return false;
+        }
+        if (!cityValue) {
           $('#city-value').closest('.control-group').addClass('error');
           alert('信息未填完整');
           $('.submit_btn').button('reset');
