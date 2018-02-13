@@ -99,6 +99,7 @@
                   name='addr'
                   type='text'
                   value="<%= typeof(addr) === 'undefined' ? '' : addr %>"
+                  onFocus="geolocate()"
                 />
               </div>
             </div>
@@ -222,6 +223,7 @@
 
 <!-- markdown editor -->
 <%- partial('../includes/editor') %>
+
 <script>
   (function () {
     var editor = new Editor();
@@ -297,4 +299,32 @@
     // END 选择租房版块时，显示额外信息
 
   })();
+
+  var placeSearch, autocomplete;
+  function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(
+      (document.getElementById('addr')),
+      {types: ['geocode']}
+    );
+    // autocomplete.addListener('place_changed', fillInAddress);
+  }
+
+  function geolocate() {
+    // debugger;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var geolocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        var circle = new google.maps.Circle({
+          center: geolocation,
+          radius: position.coords.accuracy
+        });
+        autocomplete.setBounds(circle.getBounds());
+      });
+    }
+  }
 </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIzk9elKY3XoEYtIrZRhUn8g0GNpwJOZw&libraries=places&callback=initAutocomplete" async defer></script>
+
